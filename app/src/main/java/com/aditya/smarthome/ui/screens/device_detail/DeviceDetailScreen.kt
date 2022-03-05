@@ -36,6 +36,7 @@ fun DeviceDetailScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(48.dp)
                     .padding(8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -127,14 +128,14 @@ fun DeviceDetailScreen(
                     itemsIndexed(viewModel.allIcons.value) { index,icon ->
                         Box(
                             modifier = Modifier
-                                .size(100.dp)
+                                .size(80.dp)
                                 .clickable { viewModel.updateDeviceIcon(index+1) }
                         ) {
                             Image(
                                 painter = painterResource(id = icon),
                                 contentDescription = "Device Icons",
                                 modifier = Modifier
-                                    .size(100.dp)
+                                    .size(80.dp)
                                     .padding(16.dp),
                                 contentScale = ContentScale.Fit
                             )
@@ -142,14 +143,14 @@ fun DeviceDetailScreen(
                                 Box(
                                     modifier = Modifier
                                         .clip(CircleShape)
-                                        .size(100.dp)
+                                        .size(80.dp)
                                         .background(MaterialTheme.colors.primary.copy(0.5f)),
                                     content = {
                                         Icon(
                                             imageVector = Icons.Default.Check,
                                             contentDescription = "Selected Icon",
                                             modifier = Modifier
-                                                .size(100.dp)
+                                                .size(80.dp)
                                                 .padding(16.dp)
                                         )
                                     }

@@ -1,6 +1,7 @@
 package com.aditya.smarthome.ui.components
 
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -48,7 +49,8 @@ fun AlertDialogCard(
                 ) {
                     Text(text = dismissButtonText)
                 }
-            }
+            },
+            backgroundColor = MaterialTheme.colors.background
         )
     }
 }

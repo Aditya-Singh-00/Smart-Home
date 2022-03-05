@@ -7,10 +7,16 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Logout
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.aditya.smarthome.ui.components.AlertDialogCard
 import com.aditya.smarthome.ui.theme.SmartHomeTheme
 import com.aditya.smarthome.util.Navigation
 import com.aditya.smarthome.util.Screen
@@ -28,13 +34,34 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SmartHomeTheme {
-                Surface(
+                val mainViewModel: MainViewModel = hiltViewModel()
+                val navController = rememberAnimatedNavController()
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(MaterialTheme.colors.background)
+                        .background(MaterialTheme.colors.background),
+                    topBar = {
+                        TopAppBar(
+                            title = { Text(stringResource(R.string.app_name)) },
+                            modifier = Modifier.fillMaxWidth(),
+                            actions = {
+                                if (navBackStackEntry?.destination?.route == Screen.HomeScreen.route) {
+                                    IconButton(
+                                        onClick = { mainViewModel.showLogoutAlert() }
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Logout,
+                                            contentDescription = "Logout Button",
+                                            tint = MaterialTheme.colors.onBackground
+                                        )
+                                    }
+                                }
+                            },
+                            backgroundColor = MaterialTheme.colors.primary.copy(0.4f)
+                        )
+                    }
                 ) {
-                    val mainViewModel: MainViewModel = hiltViewModel()
-                    val navController = rememberAnimatedNavController()
                     mainViewModel.userLoggedIn.value?.let { loggedIn ->
                         if (loggedIn) {
                             Navigation(
@@ -47,6 +74,23 @@ class MainActivity : ComponentActivity() {
                                 startDestination = Screen.LoginScreen.route
                             )
                         }
+                    }
+                    if (mainViewModel.logoutIconClicked.value) {
+                        AlertDialogCard(
+                            title = "Logout",
+                            text = "Do you want to logout?",
+                            confirmButtonText = "Yes",
+                            dismissButtonText = "No",
+                            onConfirmClick = {
+                                mainViewModel.logout()
+                                navController.navigate(Screen.LoginScreen.route) {
+                                    popUpTo(Screen.HomeScreen.route) {
+                                        inclusive = true
+                                    }
+                                }
+                            },
+                            onDialogDismiss = { mainViewModel.dismissLogoutAlert() }
+                        )
                     }
                 }
             }

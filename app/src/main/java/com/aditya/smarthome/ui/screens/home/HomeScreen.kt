@@ -3,7 +3,6 @@ package com.aditya.smarthome.ui.screens.home
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -40,15 +39,19 @@ fun HomeScreen(
             .background(MaterialTheme.colors.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Welcome $username",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .align(Alignment.CenterHorizontally),
-            style = MaterialTheme.typography.h1,
-            color = MaterialTheme.colors.onBackground
-        )
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Welcome $username",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                style = MaterialTheme.typography.h1,
+                color = MaterialTheme.colors.onBackground
+            )
+        }
 
         if (devices.isNotEmpty()) {
             LazyVerticalGrid(
