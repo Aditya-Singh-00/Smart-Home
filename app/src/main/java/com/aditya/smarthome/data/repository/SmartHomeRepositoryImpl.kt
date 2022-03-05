@@ -35,7 +35,19 @@ class SmartHomeRepositoryImpl @Inject constructor(
         device.updateStatus(id,status)
     }
 
+    override fun updateIcon(id: Int, icon: String) {
+        device.updateIcon(id,icon)
+    }
+
     override fun getStatus(): Flow<MutableList<Device>> {
         return device.getStatus()
+    }
+
+    override fun getStatusById(id: Int): Flow<Device?> {
+        return device.getStatusById(id)
+    }
+
+    override suspend fun getAllIcons(): List<String> {
+        return device.getAllIcons()
     }
 }

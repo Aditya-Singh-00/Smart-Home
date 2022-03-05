@@ -6,13 +6,16 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
-import javax.inject.Inject
+import kotlinx.coroutines.tasks.await
 
-class DeviceApi @Inject constructor(
+
+class DeviceApi (
     private val firebaseAuth: FirebaseAuth,
-    private val firebaseDatabase: FirebaseDatabase
+    private val firebaseDatabase: FirebaseDatabase,
+    private val firebaseStorage: FirebaseStorage
 ) {
     companion object {
         val default = listOf(
@@ -46,11 +49,7 @@ class DeviceApi @Inject constructor(
             val key = it.substring(0,index)
             val userDbRef = firebaseDatabase.getReference(key)
             userDbRef.child(id.toString()).child("name").setValue(name).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    //TODO
-                } else {
-                    //TODO throw some error for the popup context
-                }
+                    //TODO throw some error if task failed
             }
         }
     }
@@ -62,6 +61,16 @@ class DeviceApi @Inject constructor(
             val key = it.substring(startIndex = 0, endIndex = index)
             val userDbRef = firebaseDatabase.getReference(key)
             userDbRef.child(id.toString()).child("status").setValue(value)
+        }
+    }
+
+    fun updateIcon(id: Int, icon: String) {
+        val email = firebaseAuth.currentUser?.email
+        email?.let {
+            val index = it.indexOf("@")
+            val key = it.substring(startIndex = 0, endIndex = index)
+            val userDbRef = firebaseDatabase.getReference(key)
+            userDbRef.child(id.toString()).child("icon").setValue(icon)
         }
     }
 
@@ -87,5 +96,34 @@ class DeviceApi @Inject constructor(
                 awaitClose()
             }
         }
+    }
+
+    fun getStatusById(id: Int) = callbackFlow {
+        val user = firebaseAuth.currentUser
+        user?.let {
+            it.email?.let { email ->
+                val index = email.indexOf("@")
+                val key = email.substring(0, index)
+                firebaseDatabase.getReference(key).child(id.toString())
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val devices: Device? = snapshot.getValue(Device::class.java)
+                            this@callbackFlow.trySend(devices).isSuccess
+                        }
+                        override fun onCancelled(error: DatabaseError) {}
+                    })
+                awaitClose()
+            }
+        }
+    }
+
+    suspend fun getAllIcons(): List<String> {
+        val iconsStorageRef = firebaseStorage.getReference("images")
+        val allIcons = mutableListOf<String>()
+        val listResult = iconsStorageRef.listAll().await()
+        for (file in listResult.items) {
+            allIcons.add(file.downloadUrl.await().toString())
+        }
+        return allIcons
     }
 }

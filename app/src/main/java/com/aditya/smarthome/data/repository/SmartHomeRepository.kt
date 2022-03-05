@@ -18,5 +18,11 @@ interface SmartHomeRepository {
 
     fun updateStatus(id: Int, status: Int)
 
+    fun updateIcon(id: Int, icon: String)
+
     fun getStatus(): Flow<MutableList<Device>>
+
+    fun getStatusById(id: Int): Flow<Device?>
+
+    suspend fun getAllIcons(): List<String>
 }
