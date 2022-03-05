@@ -9,8 +9,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.tasks.await
-
+import com.aditya.smarthome.R
 
 class DeviceApi (
     private val firebaseAuth: FirebaseAuth,
@@ -64,7 +63,7 @@ class DeviceApi (
         }
     }
 
-    fun updateIcon(id: Int, icon: String) {
+    fun updateIcon(id: Int, icon: Int) {
         val email = firebaseAuth.currentUser?.email
         email?.let {
             val index = it.indexOf("@")
@@ -80,12 +79,14 @@ class DeviceApi (
             it.email?.let { email ->
                 val index = email.indexOf("@")
                 val key = email.substring(0, index)
+                val icons = getAllIcons()
                 firebaseDatabase.getReference(key)
                     .addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             val devices = mutableListOf<Device>()
                             for (deviceSnapshot in snapshot.children) {
-                                deviceSnapshot.getValue(Device::class.java)?.let { device ->
+                                deviceSnapshot.getValue(Device::class.java)?.let { it ->
+                                    val device = it.copy(icon = icons[it.icon - 1])
                                     devices.add(device)
                                 }
                             }
@@ -107,8 +108,9 @@ class DeviceApi (
                 firebaseDatabase.getReference(key).child(id.toString())
                     .addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            val devices: Device? = snapshot.getValue(Device::class.java)
-                            this@callbackFlow.trySend(devices).isSuccess
+                            val device: Device? = snapshot.getValue(Device::class.java)
+
+                            this@callbackFlow.trySend(device).isSuccess
                         }
                         override fun onCancelled(error: DatabaseError) {}
                     })
@@ -117,13 +119,19 @@ class DeviceApi (
         }
     }
 
-    suspend fun getAllIcons(): List<String> {
-        val iconsStorageRef = firebaseStorage.getReference("images")
-        val allIcons = mutableListOf<String>()
-        val listResult = iconsStorageRef.listAll().await()
-        for (file in listResult.items) {
-            allIcons.add(file.downloadUrl.await().toString())
-        }
-        return allIcons
+    fun getAllIcons(): List<Int> {
+        return listOf(
+            R.drawable.ic_1,
+            R.drawable.ic_2,
+            R.drawable.ic_3,
+            R.drawable.ic_4,
+            R.drawable.ic_5,
+            R.drawable.ic_6,
+            R.drawable.ic_7,
+            R.drawable.ic_8,
+            R.drawable.ic_9,
+            R.drawable.ic_10,
+            R.drawable.ic_11
+        )
     }
 }

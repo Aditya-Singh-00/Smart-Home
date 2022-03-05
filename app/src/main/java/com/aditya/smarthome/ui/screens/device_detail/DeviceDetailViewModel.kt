@@ -22,19 +22,19 @@ class DeviceDetailViewModel @Inject constructor(
     private val _device: MutableState<Device?> = mutableStateOf(null)
     val device : State<Device?> = _device
 
-    private val _allIcons: MutableState<List<String>> = mutableStateOf(listOf())
-    val allIcons: State<List<String>> = _allIcons
+    private val _allIcons: MutableState<List<Int>> = mutableStateOf(listOf())
+    val allIcons: State<List<Int>> = _allIcons
 
     private val _showEditDevice: MutableState<Boolean> = mutableStateOf(false)
     val showEditDevice: State<Boolean> = _showEditDevice
+
+    private val _deviceNameText: MutableState<String> = mutableStateOf("")
+    val deviceNameText: State<String> = _deviceNameText
 
     init {
         getAllIcons()
         getDevice()
     }
-
-    private val _deviceNameText: MutableState<String> = mutableStateOf(device.value?.name ?: "")
-    val deviceNameText: State<String> = _deviceNameText
 
     fun updateDeviceName() {
         device.value?.let {
@@ -52,7 +52,7 @@ class DeviceDetailViewModel @Inject constructor(
         }
     }
 
-    fun updateDeviceIcon(icon: String) {
+    fun updateDeviceIcon(icon: Int) {
         device.value?.let {
             viewModelScope.launch(Dispatchers.IO) {
                 repository.updateIcon(it.id, icon)
@@ -74,14 +74,13 @@ class DeviceDetailViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.IO) {
                 repository.getStatusById(id).collect {
                     _device.value = it
+                    _deviceNameText.value = it?.name ?: ""
                 }
             }
         }
     }
 
     private fun getAllIcons() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _allIcons.value = repository.getAllIcons()
-        }
+        _allIcons.value = repository.getAllIcons()
     }
 }

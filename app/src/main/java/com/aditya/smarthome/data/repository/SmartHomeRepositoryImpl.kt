@@ -3,6 +3,7 @@ package com.aditya.smarthome.data.repository
 import com.aditya.smarthome.data.models.Device
 import com.aditya.smarthome.data.source.AuthorizationApi
 import com.aditya.smarthome.data.source.DeviceApi
+import com.aditya.smarthome.util.Resource
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -11,11 +12,11 @@ class SmartHomeRepositoryImpl @Inject constructor(
     private val authorization: AuthorizationApi,
     private val device: DeviceApi
 ): SmartHomeRepository {
-    override suspend fun login(email: String, password: String): FirebaseUser? {
+    override suspend fun login(email: String, password: String): Resource<FirebaseUser> {
         return authorization.login(email,password)
     }
 
-    override suspend fun create(name: String, email: String, password: String): FirebaseUser? {
+    override suspend fun create(name: String, email: String, password: String): Resource<FirebaseUser> {
         return authorization.create(name,email,password)
     }
 
@@ -35,7 +36,7 @@ class SmartHomeRepositoryImpl @Inject constructor(
         device.updateStatus(id,status)
     }
 
-    override fun updateIcon(id: Int, icon: String) {
+    override fun updateIcon(id: Int, icon: Int) {
         device.updateIcon(id,icon)
     }
 
@@ -47,7 +48,7 @@ class SmartHomeRepositoryImpl @Inject constructor(
         return device.getStatusById(id)
     }
 
-    override suspend fun getAllIcons(): List<String> {
+    override fun getAllIcons(): List<Int> {
         return device.getAllIcons()
     }
 }

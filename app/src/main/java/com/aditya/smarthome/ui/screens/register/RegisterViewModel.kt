@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aditya.smarthome.data.repository.SmartHomeRepository
+import com.aditya.smarthome.util.Resource
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -76,15 +77,18 @@ class RegisterViewModel @Inject constructor(
         }
         _showProgressBar.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            val user = repository.create(
+            val resource = repository.create(
                     name = nameText.value,
                     email = emailText.value,
                     password = passwordText.value
                 )
-            if (user != null) {
-                _user.value = user
-            } else {
-                _errorMessage.value = "Something went wrong"
+            when(resource) {
+                is Resource.Success -> {
+                    _user.value = resource.data
+                }
+                is Resource.Error -> {
+                    _errorMessage.value = resource.message ?: "Something went wrong"
+                }
             }
         }.invokeOnCompletion {
             _showProgressBar.value = false

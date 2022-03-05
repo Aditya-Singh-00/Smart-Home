@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -50,8 +51,8 @@ fun LoginScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
-            .padding(12.dp)
+            .background(MaterialTheme.colors.background)
+            .padding(16.dp)
     ) {
         Column(
             modifier = Modifier
@@ -64,9 +65,11 @@ fun LoginScreen(
                 modifier = Modifier.align(Alignment.Start),
                 text = stringResource(id = R.string.login),
                 style = MaterialTheme.typography.body2,
-                fontSize = 32.sp
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 32.sp,
+                color = MaterialTheme.colors.onBackground
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             StandardTextField(
                 text = loginViewModel.emailText.value,
                 onValueChange = { loginViewModel.setEmailText(it) },
@@ -76,7 +79,7 @@ fun LoginScreen(
                 keyboardType = KeyboardType.Email,
                 isError = loginViewModel.emailTextError.value
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             StandardTextField(
                 text = loginViewModel.passwordText.value,
                 onValueChange = { loginViewModel.setPasswordText(it) },
@@ -86,7 +89,7 @@ fun LoginScreen(
                 keyboardType = KeyboardType.Password,
                 isError = loginViewModel.passwordTextError.value
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Button(
                 onClick = {
                     loginViewModel.loginUser()
@@ -98,7 +101,7 @@ fun LoginScreen(
                 Text(
                     text = stringResource(id = R.string.login),
                     style = MaterialTheme.typography.body1,
-                    color = MaterialTheme.colors.onPrimary
+                    color = MaterialTheme.colors.onBackground
                 )
             }
         }
@@ -106,12 +109,13 @@ fun LoginScreen(
             CircularProgressIndicator(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(12.dp)
+                    .padding(32.dp)
             )
         }
         Text(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
+                .padding(bottom = 12.dp)
                 .clickable { onSignupClick() },
             text = buildAnnotatedString {
                 append(stringResource(id = R.string.do_not_have_an_account))
@@ -119,7 +123,9 @@ fun LoginScreen(
                     append(stringResource(id = R.string.sign_up))
                 }
             },
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.body1,
+            color = MaterialTheme.colors.onBackground
         )
+
     }
 }

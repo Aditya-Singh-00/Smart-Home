@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -51,7 +52,7 @@ fun RegisterScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
+            .background(MaterialTheme.colors.background)
             .padding(12.dp)
     ) {
         Column(
@@ -65,9 +66,11 @@ fun RegisterScreen(
                 modifier = Modifier.align(Alignment.Start),
                 text = stringResource(id = R.string.register),
                 style = MaterialTheme.typography.body2,
-                fontSize = 32.sp
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 32.sp,
+                color = MaterialTheme.colors.onBackground
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             StandardTextField(
                 text = registerViewModel.emailText.value,
                 onValueChange = { registerViewModel.setEmailText(it) },
@@ -77,7 +80,7 @@ fun RegisterScreen(
                 hint = stringResource(id = R.string.email),
                 isError = registerViewModel.emailTextError.value
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             StandardTextField(
                 text = registerViewModel.nameText.value,
                 onValueChange = { registerViewModel.setNameText(it) },
@@ -87,7 +90,7 @@ fun RegisterScreen(
                 hint = stringResource(id = R.string.username),
                 isError = registerViewModel.nameTextError.value
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             StandardTextField(
                 text = registerViewModel.passwordText.value,
                 onValueChange = { registerViewModel.setPasswordText(it) },
@@ -97,7 +100,7 @@ fun RegisterScreen(
                 hint = stringResource(id = R.string.password),
                 isError = registerViewModel.passwordTextError.value
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Button(
                 onClick = {
                     registerViewModel.registerUser()
@@ -109,7 +112,7 @@ fun RegisterScreen(
                 Text(
                     text = stringResource(id = R.string.register),
                     style = MaterialTheme.typography.body1,
-                    color = MaterialTheme.colors.onPrimary
+                    color = MaterialTheme.colors.onBackground
                 )
             }
         }
@@ -117,12 +120,13 @@ fun RegisterScreen(
             CircularProgressIndicator(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(12.dp)
+                    .padding(32.dp)
             )
         }
         Text(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
+                .padding(12.dp)
                 .clickable { onLoginClick() },
             text = buildAnnotatedString {
                 append(stringResource(id = R.string.already_have_an_account))
@@ -130,7 +134,8 @@ fun RegisterScreen(
                     append(stringResource(id = R.string.sign_in))
                 }
             },
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.body1,
+            color = MaterialTheme.colors.onBackground
         )
     }
 }

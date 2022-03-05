@@ -5,6 +5,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import com.aditya.smarthome.R
 
 val quicksand = FontFamily(
@@ -17,13 +18,22 @@ val quicksand = FontFamily(
 
 
 val Typography = Typography(
-    h1 = TextStyle(fontFamily = quicksand),
+    h1 = TextStyle(
+        fontFamily = quicksand,
+        fontSize = 24.sp
+    ),
     h2 = TextStyle(fontFamily = quicksand),
     h3 = TextStyle(fontFamily = quicksand),
     h4 = TextStyle(fontFamily = quicksand),
     h5 = TextStyle(fontFamily = quicksand),
-    body1 = TextStyle(fontFamily = quicksand),
-    body2 = TextStyle(fontFamily = quicksand),
+    body1 = TextStyle(
+        fontFamily = quicksand,
+        fontSize = 16.sp
+    ),
+    body2 = TextStyle(
+        fontFamily = quicksand,
+        fontSize = 14.sp
+    ),
     button = TextStyle(fontFamily = quicksand)
 
 )

@@ -39,11 +39,11 @@ fun StandardTextField(
         },
         modifier = modifier
             .fillMaxWidth()
-            .background(color = MaterialTheme.colors.surface),
+            .background(color = MaterialTheme.colors.background),
         placeholder = {
             Text(
                 text = hint,
-                color = MaterialTheme.colors.onSurface.copy(0.60f)
+                color = MaterialTheme.colors.onBackground.copy(0.60f)
             )
         },
         leadingIcon = if (leadingIcon != null) {
@@ -85,6 +85,9 @@ fun StandardTextField(
             keyboardType = keyboardType
         ),
         singleLine = singleLine,
-        maxLines = maxLines
+        maxLines = maxLines,
+        colors = TextFieldDefaults.textFieldColors(
+            textColor = MaterialTheme.colors.onBackground
+        )
     )
 }

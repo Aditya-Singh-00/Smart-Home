@@ -34,7 +34,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFirebaseStorage(): FirebaseStorage {
-        return FirebaseStorage.getInstance(STORAGE_URL)
+        return FirebaseStorage.getInstance()
     }
 
     @Provides
