@@ -6,15 +6,13 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import com.aditya.smarthome.R
 
 class DeviceApi (
     private val firebaseAuth: FirebaseAuth,
-    private val firebaseDatabase: FirebaseDatabase,
-    private val firebaseStorage: FirebaseStorage
+    private val firebaseDatabase: FirebaseDatabase
 ) {
     companion object {
         val default = listOf(
@@ -47,9 +45,7 @@ class DeviceApi (
             val index = it.indexOf("@")
             val key = it.substring(0,index)
             val userDbRef = firebaseDatabase.getReference(key)
-            userDbRef.child(id.toString()).child("name").setValue(name).addOnCompleteListener { task ->
-                    //TODO throw some error if task failed
-            }
+            userDbRef.child(id.toString()).child("name").setValue(name)
         }
     }
 

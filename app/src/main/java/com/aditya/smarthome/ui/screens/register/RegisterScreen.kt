@@ -1,5 +1,6 @@
 package com.aditya.smarthome.ui.screens.register
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,7 +15,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.Green
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -55,6 +56,14 @@ fun RegisterScreen(
             .background(MaterialTheme.colors.background)
             .padding(12.dp)
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_smart_home),
+            contentDescription = "Smart Home",
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(24.dp)
+                .size(150.dp)
+        )
         Column(
             modifier = Modifier
                 .align(Alignment.Center)
@@ -130,7 +139,7 @@ fun RegisterScreen(
                 .clickable { onLoginClick() },
             text = buildAnnotatedString {
                 append(stringResource(id = R.string.already_have_an_account))
-                withStyle(style = SpanStyle(color = Green)) {
+                withStyle(style = SpanStyle(color = MaterialTheme.colors.primary)) {
                     append(stringResource(id = R.string.sign_in))
                 }
             },

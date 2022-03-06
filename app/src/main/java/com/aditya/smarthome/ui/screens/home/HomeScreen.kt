@@ -39,19 +39,15 @@ fun HomeScreen(
             .background(MaterialTheme.colors.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Welcome $username",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                style = MaterialTheme.typography.h1,
-                color = MaterialTheme.colors.onBackground
-            )
-        }
+        Text(
+            text = "Welcome $username",
+            modifier = Modifier
+                .width(IntrinsicSize.Max)
+                .padding(12.dp)
+                .align(Alignment.CenterHorizontally),
+            style = MaterialTheme.typography.h1,
+            color = MaterialTheme.colors.onBackground
+        )
 
         if (devices.isNotEmpty()) {
             LazyVerticalGrid(

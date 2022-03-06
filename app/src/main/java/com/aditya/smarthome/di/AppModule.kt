@@ -5,10 +5,8 @@ import com.aditya.smarthome.data.repository.SmartHomeRepositoryImpl
 import com.aditya.smarthome.data.source.AuthorizationApi
 import com.aditya.smarthome.data.source.DeviceApi
 import com.aditya.smarthome.util.DATABASE_URL
-import com.aditya.smarthome.util.STORAGE_URL
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,12 +31,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseStorage(): FirebaseStorage {
-        return FirebaseStorage.getInstance()
-    }
-
-    @Provides
-    @Singleton
     fun provideAuthorizationApi(
         firebaseAuth: FirebaseAuth,
         firebaseDatabase: FirebaseDatabase
@@ -50,10 +42,9 @@ object AppModule {
     @Singleton
     fun provideDevices(
         firebaseAuth: FirebaseAuth,
-        firebaseDatabase: FirebaseDatabase,
-        firebaseStorage: FirebaseStorage
+        firebaseDatabase: FirebaseDatabase
     ): DeviceApi {
-        return DeviceApi(firebaseAuth, firebaseDatabase,firebaseStorage)
+        return DeviceApi(firebaseAuth, firebaseDatabase)
     }
 
     @Provides

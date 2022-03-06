@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,12 +21,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.aditya.smarthome.ui.components.StandardTextField
+import kotlinx.coroutines.launch
 
 @Composable
 fun DeviceDetailScreen(
+    scaffoldState: ScaffoldState,
     viewModel: DeviceDetailViewModel = hiltViewModel()
 ) {
+
     val device = viewModel.device.value
+    val scope = rememberCoroutineScope()
+
     device?.let {
         Column(
             modifier = Modifier
@@ -108,15 +114,25 @@ fun DeviceDetailScreen(
                 ) {
                     StandardTextField(
                         text = viewModel.deviceNameText.value,
-                        modifier = Modifier.fillMaxWidth(0.80f),
+                        modifier = Modifier.fillMaxWidth(0.50f),
                         onValueChange = { viewModel.onDeviceNameTextChange(it) }
                     )
-                    IconButton(
-                        onClick = { viewModel.updateDeviceName() }
+                    Button(
+                        onClick = {
+                            viewModel.updateDeviceName()
+                            scope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    message = "Device Name Changed",
+                                    actionLabel = "Ok"
+                                )
+                            }
+                        },
+                        enabled = device.name != viewModel.deviceNameText.value
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = "Save Device Name"
+                        Text(
+                            text = "Change Name",
+                            style = MaterialTheme.typography.body1,
+                            color = MaterialTheme.colors.onBackground
                         )
                     }
                 }
@@ -125,11 +141,19 @@ fun DeviceDetailScreen(
                         .fillMaxWidth()
                         .padding(8.dp)
                 ) {
-                    itemsIndexed(viewModel.allIcons.value) { index,icon ->
+                    itemsIndexed(viewModel.allIcons.value) { index, icon ->
                         Box(
                             modifier = Modifier
                                 .size(80.dp)
-                                .clickable { viewModel.updateDeviceIcon(index+1) }
+                                .clickable {
+                                    viewModel.updateDeviceIcon(index + 1)
+                                    scope.launch {
+                                        scaffoldState.snackbarHostState.showSnackbar(
+                                            message = "Device Icon Changed",
+                                            actionLabel = "Ok"
+                                        )
+                                    }
+                                }
                         ) {
                             Image(
                                 painter = painterResource(id = icon),
@@ -139,19 +163,20 @@ fun DeviceDetailScreen(
                                     .padding(16.dp),
                                 contentScale = ContentScale.Fit
                             )
-                            if (device.icon == index+1) {
+                            if (device.icon == index + 1) {
                                 Box(
                                     modifier = Modifier
                                         .clip(CircleShape)
                                         .size(80.dp)
-                                        .background(MaterialTheme.colors.primary.copy(0.5f)),
+                                        .background(MaterialTheme.colors.primary.copy(0.5f))
+                                        .padding(8.dp),
                                     content = {
                                         Icon(
                                             imageVector = Icons.Default.Check,
                                             contentDescription = "Selected Icon",
                                             modifier = Modifier
                                                 .size(80.dp)
-                                                .padding(16.dp)
+                                                .padding(8.dp)
                                         )
                                     }
                                 )

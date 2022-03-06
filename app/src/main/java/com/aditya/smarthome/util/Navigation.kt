@@ -3,6 +3,7 @@ package com.aditya.smarthome.util
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -22,7 +23,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @Composable
 fun Navigation(
     navController: NavHostController,
-    startDestination: String
+    startDestination: String,
+    scaffoldState: ScaffoldState
 ) {
     AnimatedNavHost(
         navController = navController,
@@ -81,7 +83,7 @@ fun Navigation(
                 navArgument("id") { type = NavType.IntType }
             )
         ) {
-            DeviceDetailScreen()
+            DeviceDetailScreen(scaffoldState)
         }
     }
 }

@@ -37,9 +37,11 @@ class DeviceDetailViewModel @Inject constructor(
     }
 
     fun updateDeviceName() {
+        val name = deviceNameText.value.trim()
+        if (name.isBlank()) return
         device.value?.let {
             viewModelScope.launch(Dispatchers.IO) {
-                repository.updateName(it.id,deviceNameText.value)
+                repository.updateName(it.id,name)
             }
         }
     }

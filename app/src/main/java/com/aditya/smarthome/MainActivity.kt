@@ -37,6 +37,7 @@ class MainActivity : ComponentActivity() {
                 val mainViewModel: MainViewModel = hiltViewModel()
                 val navController = rememberAnimatedNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val scaffoldState = rememberScaffoldState()
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
@@ -60,18 +61,30 @@ class MainActivity : ComponentActivity() {
                             },
                             backgroundColor = MaterialTheme.colors.primary.copy(0.4f)
                         )
+                    },
+                    scaffoldState = scaffoldState,
+                    snackbarHost = {
+                        SnackbarHost(it) { data ->
+                            Snackbar(
+                                backgroundColor = MaterialTheme.colors.primary,
+                                actionColor = MaterialTheme.colors.onBackground,
+                                snackbarData = data
+                            )
+                        }
                     }
                 ) {
                     mainViewModel.userLoggedIn.value?.let { loggedIn ->
                         if (loggedIn) {
                             Navigation(
                                 navController = navController,
-                                startDestination = Screen.HomeScreen.route
+                                startDestination = Screen.HomeScreen.route,
+                                scaffoldState = scaffoldState
                             )
                         } else {
                             Navigation(
                                 navController = navController,
-                                startDestination = Screen.LoginScreen.route
+                                startDestination = Screen.LoginScreen.route,
+                                scaffoldState = scaffoldState
                             )
                         }
                     }
